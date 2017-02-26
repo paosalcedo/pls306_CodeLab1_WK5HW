@@ -32,7 +32,7 @@ public class LevelLoader : MonoBehaviour {
 			for (int xPos = 0; xPos < line.Length; xPos++) {
 
 				if (line [xPos] == 'x') {
-					GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
+					GameObject cube = Instantiate (Resources.Load("Prefabs/Tile01") as GameObject);
 
 					cube.transform.parent = levelHolder.transform;
 
