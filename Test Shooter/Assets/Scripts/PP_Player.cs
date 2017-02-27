@@ -31,31 +31,30 @@ public class PP_Player : MonoBehaviour {
 		float t_inputVertical = Input.GetAxis ("Vertical");
 //		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
 		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal);
-
+		Debug.Log(myDirection);
 		myMoveAxis += myDirection * moveSensitivity;
 		if (myMoveAxis.magnitude > 1)
 			myMoveAxis.Normalize ();
 
 
 		myRigidbody2D.velocity = myMoveAxis * mySpeed;
-		//myRigidbody2D.AddForce (myMoveAxis * mySpeed);
-	
+ 	
 /********************************************************
 -----------CREATES RESISTANCE AND INERTIA--------------
 *********************************************************/
-		Debug.Log (myMoveAxis.magnitude);
+		//Debug.Log (myMoveAxis.magnitude);
 		float t_moveAxisReduce = Time.deltaTime * stickPrecision;
-		Debug.Log(t_moveAxisReduce);
+		//Debug.Log(t_moveAxisReduce);
 		if (myMoveAxis.magnitude < t_moveAxisReduce) { //this is when left stick is not pressed.
 			myMoveAxis = Vector2.zero;
 		} 
+//			"UN-COMMENT" ELSE CONDITION BELOW FOR BETTER KEYBOARD SUPPORT
 //			else {		
-////			Debug.Log("no it's more");
-////			myMoveAxis *= (myMoveAxis.magnitude - t_moveAxisReduce); 
-////			//adding Sutphin's deadzone fix
-////			myMoveAxis = myMoveAxis.normalized * 
-////						((myMoveAxis.magnitude - t_moveAxisReduce) / 
-////						(1 - t_moveAxisReduce)); 
+// 			myMoveAxis *= (myMoveAxis.magnitude - t_moveAxisReduce); 
+//			//adding Sutphin's deadzone fix
+//			myMoveAxis = myMoveAxis.normalized * 
+//						((myMoveAxis.magnitude - t_moveAxisReduce) / 
+//						(1 - t_moveAxisReduce)); 
 //		}
 
 //		float deadzone = 0.2f;		
@@ -70,29 +69,32 @@ public class PP_Player : MonoBehaviour {
 //    stickInput = stickInput.normalized * ((stickInput.magnitude - deadzone) / (1 - deadzone));
 	}
 
-
 	private void UpdateRotation ()
 	{
-//		ASSIGNING CONTROL TO THE RIGHT STICK
-		float deadzone = 0.2f;
-		float inputRightStickX = Input.GetAxis ("RightStickX");
-		float inputRightStickY = Input.GetAxis ("RightStickY");
 		
-		Vector2 inputRightStick;
-		inputRightStick = new Vector2 (inputRightStickX, inputRightStickY);
+//		ASSIGN AIMING TO THE RIGHT STICK
+			float deadzone = 0.2f;
+			float inputRightStickX = Input.GetAxis ("RightStickX");
+			float inputRightStickY = Input.GetAxis ("RightStickY");
+			
+			Vector2 inputRightStick;
+			inputRightStick = new Vector2 (inputRightStickX, inputRightStickY);
+			
+			Vector3 lastRotation;
+			lastRotation = transform.eulerAngles; 
 		
-		Vector3 lastRotation;
-		lastRotation = transform.eulerAngles; 
-		
-		transform.eulerAngles = new Vector3(
-			transform.eulerAngles.x, 
-			transform.eulerAngles.y,  
-			Mathf.Atan2(inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
+			transform.eulerAngles = new Vector3 (
+				transform.eulerAngles.x, 
+				transform.eulerAngles.y,  
+				Mathf.Atan2 (inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
+	
+			if (inputRightStick.magnitude < deadzone) {
+				transform.eulerAngles = lastRotation;
+			}		
 
+				
 //Prevents snapping back to transform.eulerAngles.z = 270f when letting go of right analog stick.
-		if (inputRightStick.magnitude < deadzone) {
-			transform.eulerAngles = lastRotation;
-		}		
+		
 
 	}
 
