@@ -10,35 +10,27 @@ public class PP_Player : MonoBehaviour {
 
 	private Vector2 myDirection;
 	private Vector2 myMoveAxis;
-	private Vector3 myRotation;
 	[SerializeField] float mySpeed = 1;
-	[SerializeField] float moveGravity;
+	[SerializeField] float stickPrecision;
 	[SerializeField] float moveSensitivity;
-	[SerializeField] float myRotSpeed;	
 
 	// Use this for initialization
 	void Start () {
-		myRotation = transform.rotation.eulerAngles;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-//		if (gameObject.tag == "Rotator") {
-//			UpdateRotation ();
-//		} else {
-//			UpdateMove ();
-//		}
-
 		UpdateMove();
 		UpdateRotation();
 	}
 
-	private void UpdateMove () 
+	private void UpdateMove ()
 	{
 		float t_inputHorizontal = Input.GetAxis ("Horizontal");
 		float t_inputVertical = Input.GetAxis ("Vertical");
-		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
+//		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
+		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal);
 
 		myMoveAxis += myDirection * moveSensitivity;
 		if (myMoveAxis.magnitude > 1)
@@ -51,20 +43,36 @@ public class PP_Player : MonoBehaviour {
 /********************************************************
 -----------CREATES RESISTANCE AND INERTIA--------------
 *********************************************************/
-		
-		float t_moveAxisReduce = Time.deltaTime * moveGravity;
+		Debug.Log (myMoveAxis.magnitude);
+		float t_moveAxisReduce = Time.deltaTime * stickPrecision;
 		Debug.Log(t_moveAxisReduce);
-		if (myMoveAxis.magnitude < t_moveAxisReduce)
+		if (myMoveAxis.magnitude < t_moveAxisReduce) { //this is when left stick is not pressed.
 			myMoveAxis = Vector2.zero;
-		else
-			myMoveAxis *= (myMoveAxis.magnitude - t_moveAxisReduce);
+		} 
+//			else {		
+////			Debug.Log("no it's more");
+////			myMoveAxis *= (myMoveAxis.magnitude - t_moveAxisReduce); 
+////			//adding Sutphin's deadzone fix
+////			myMoveAxis = myMoveAxis.normalized * 
+////						((myMoveAxis.magnitude - t_moveAxisReduce) / 
+////						(1 - t_moveAxisReduce)); 
+//		}
+
+//		float deadzone = 0.2f;		
+//		if (myMoveAxis.magnitude < deadzone)
+//			myMoveAxis = Vector2.zero;
+//		else
+//			myMoveAxis = myMoveAxis.normalized * ((myMoveAxis.magnitude - deadzone)/(1-deadzone));
+
+//		if(stickInput.magnitude < deadzone)
+//    stickInput = Vector2.zero;
+//else
+//    stickInput = stickInput.normalized * ((stickInput.magnitude - deadzone) / (1 - deadzone));
 	}
+
 
 	private void UpdateRotation ()
 	{
-//		float inputRotate = Input.GetAxis("RightStickX");
-//		transform.Rotate(Vector3.forward * myRotSpeed * inputRotate);
-
 //		ASSIGNING CONTROL TO THE RIGHT STICK
 		float deadzone = 0.2f;
 		float inputRightStickX = Input.GetAxis ("RightStickX");
@@ -79,34 +87,13 @@ public class PP_Player : MonoBehaviour {
 		transform.eulerAngles = new Vector3(
 			transform.eulerAngles.x, 
 			transform.eulerAngles.y,  
-			Mathf.Atan2(inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg);		
+			Mathf.Atan2(inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
 
-//Attempt to disable the rotation reset due to Unity's controller deadzone
+//Prevents snapping back to transform.eulerAngles.z = 270f when letting go of right analog stick.
 		if (inputRightStick.magnitude < deadzone) {
 			transform.eulerAngles = lastRotation;
 		}		
 
-//		float t_inputHorizontal = Input.GetAxis ("RightStickX");
-//		float t_inputVertical = Input.GetAxis ("RightStickY");
-//		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
-//
-//		myMoveAxis += myDirection * moveSensitivity;
-//		if (myMoveAxis.magnitude > 1)
-//			myMoveAxis.Normalize ();
-//
-//
-//		myRigidbody2D.velocity = myMoveAxis * mySpeed;
-//		//myRigidbody2D.AddForce (myMoveAxis * mySpeed);
-//	
-///********************************************************
-//-----------CREATES RESISTANCE AND INERTIA--------------
-//*********************************************************/
-//
-//		float t_moveAxisReduce = Time.deltaTime * moveGravity;
-//		if (myMoveAxis.magnitude < t_moveAxisReduce)
-//			myMoveAxis = Vector2.zero;
-//		else
-//			myMoveAxis *= (myMoveAxis.magnitude - t_moveAxisReduce);
 	}
 
 }
