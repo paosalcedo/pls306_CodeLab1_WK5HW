@@ -7,9 +7,10 @@ public class PP_Player : MonoBehaviour {
 	[SerializeField] int myTeamNumber = 1;
 	[SerializeField] string myControl = "1";
 	[SerializeField] Rigidbody2D myRigidbody2D;
+	[SerializeField] GameObject trapBullet;
 
-	private Vector2 myDirection;
-	private Vector2 myMoveAxis;
+	public Vector2 myDirection;
+	public Vector2 myMoveAxis;
 	[SerializeField] float mySpeed = 1;
 	[SerializeField] float stickPrecision;
 	[SerializeField] float moveSensitivity;
@@ -23,6 +24,7 @@ public class PP_Player : MonoBehaviour {
 	{
 		UpdateMove();
 		UpdateRotation();
+		TrapperAttack();
 	}
 
 	private void UpdateMove ()
@@ -31,11 +33,10 @@ public class PP_Player : MonoBehaviour {
 		float t_inputVertical = Input.GetAxis ("Vertical");
 //		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
 		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal);
-		Debug.Log(myDirection);
+
 		myMoveAxis += myDirection * moveSensitivity;
 		if (myMoveAxis.magnitude > 1)
 			myMoveAxis.Normalize ();
-
 
 		myRigidbody2D.velocity = myMoveAxis * mySpeed;
  	
@@ -44,7 +45,11 @@ public class PP_Player : MonoBehaviour {
 *********************************************************/
 		//Debug.Log (myMoveAxis.magnitude);
 		float t_moveAxisReduce = Time.deltaTime * stickPrecision;
-		//Debug.Log(t_moveAxisReduce);
+//		Debug.Log("move axis reduce: " + t_moveAxisReduce);
+//		Debug.Log("myDirection: " + myDirection.magnitude);
+//		Debug.Log("myMoveAxis: " + myMoveAxis.magnitude);
+//		Debug.Log("myRigidbody2D.velocity: " + myRigidbody2D.velocity.magnitude);
+
 		if (myMoveAxis.magnitude < t_moveAxisReduce) { //this is when left stick is not pressed.
 			myMoveAxis = Vector2.zero;
 		} 
@@ -88,14 +93,21 @@ public class PP_Player : MonoBehaviour {
 				transform.eulerAngles.y,  
 				Mathf.Atan2 (inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
 	
+//Prevents snapping back to transform.eulerAngles.z = 270f when letting go of right analog stick.
 			if (inputRightStick.magnitude < deadzone) {
 				transform.eulerAngles = lastRotation;
 			}		
 
-				
-//Prevents snapping back to transform.eulerAngles.z = 270f when letting go of right analog stick.
-		
+	}
 
+	private void TrapperAttack ()
+	{
+		float inputAttack = Input.GetAxis ("RightTrigger");
+		if (inputAttack == 1) {
+				trapBullet = Instantiate (Resources.Load ("Prefabs/TrapBullet") as GameObject); 
+				trapBullet.transform.position = transform.position;
+				trapBullet.transform.rotation = transform.rotation;		
+		}
 	}
 
 }
