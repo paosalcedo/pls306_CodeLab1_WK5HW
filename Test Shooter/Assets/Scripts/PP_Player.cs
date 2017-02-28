@@ -85,18 +85,30 @@ public class PP_Player : MonoBehaviour {
 			Vector2 inputRightStick;
 			inputRightStick = new Vector2 (inputRightStickX, inputRightStickY);
 			
-			Vector3 lastRotation;
-			lastRotation = transform.eulerAngles; 
-		
-			transform.eulerAngles = new Vector3 (
-				transform.eulerAngles.x, 
-				transform.eulerAngles.y,  
-				Mathf.Atan2 (inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
-	
+//Stores the last rotation angle.
+//			Vector3 lastRotation;
+//			lastRotation = transform.eulerAngles; 
+//			
+//			transform.eulerAngles = new Vector3 (
+//				transform.eulerAngles.x, 
+//				transform.eulerAngles.y,  
+//				Mathf.Atan2 (inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg); //binds z rotation to the right stick		
+//	
+
 //Prevents snapping back to transform.eulerAngles.z = 270f when letting go of right analog stick.
-			if (inputRightStick.magnitude < deadzone) {
-				transform.eulerAngles = lastRotation;
-			}		
+//			if (inputRightStick.magnitude < deadzone) {
+//				transform.eulerAngles = lastRotation;
+//			}		
+
+//Rigidbody version of rightstick control. 
+		
+		float lastRot = transform.eulerAngles.z; 
+		myRigidbody2D.MoveRotation (Mathf.Atan2 (inputRightStick.x, inputRightStick.y) * Mathf.Rad2Deg);
+
+		if (inputRightStick.magnitude < deadzone) {
+			myRigidbody2D.MoveRotation (lastRot);
+		}		
+
 
 	}
 

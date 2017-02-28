@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class BulletMover : MonoBehaviour {
 	[SerializeField] Rigidbody2D rb;
-	[SerializeField] GameObject player;
+//	[SerializeField] GameObject player;
 	[SerializeField] float mySpeed; 
-	private Vector2 myAimDir;
+	//private Vector2 myAimDir;
+	//[SerializeField] Rigidbody2D playerRigidBody;
+
 	
 	// Update is called once per frame
 	void Update () {
 		MoveBullet();	
 	}
 
-	private void MoveBullet ()
-	{
-		rb.velocity = (Vector2.right * mySpeed);
+	private void MoveBullet (){ 
+		rb.velocity = transform.up * mySpeed; 
 	}
+
 }
