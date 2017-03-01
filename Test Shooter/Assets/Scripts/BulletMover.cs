@@ -16,7 +16,22 @@ public class BulletMover : MonoBehaviour {
 	}
 
 	private void MoveBullet (){ 
-		rb.velocity = transform.up * mySpeed; 
+		rb.velocity = transform.up * mySpeed * Time.deltaTime; 
 	}
 
+	void OnCollisionEnter2D(Collision2D collide){
+		if (collide.gameObject.tag == "Enemy") {
+			Destroy (gameObject);
+			Destroy (collide.gameObject);
+		} 
+
+		if (collide.gameObject.tag == "Level") {
+			Destroy (gameObject);
+		} 
+
+		if (collide.gameObject.tag == "EnemyWeapons") {
+			Destroy (collide.gameObject);
+			Destroy (gameObject);
+		}
+	}
 }

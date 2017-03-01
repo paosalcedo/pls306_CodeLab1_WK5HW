@@ -52,8 +52,8 @@ public class LevelLoader : MonoBehaviour {
 			}
 			//Instantiate player2
 			if (line [xPos] == 'b') {
-				GameObject player2 = Instantiate (Resources.Load ("Prefabs/Player") as GameObject); 
-				player2.transform.position = new Vector3 (
+				GameObject enemy = Instantiate (Resources.Load ("Prefabs/Enemy") as GameObject); 
+				enemy.transform.position = new Vector3 (
 						xPos + offsetX, 
 						yPos + offsetY, 
 						0f);

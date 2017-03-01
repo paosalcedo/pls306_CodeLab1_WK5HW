@@ -8,7 +8,7 @@ public class PP_Player : MonoBehaviour {
 	[SerializeField] string myControl = "1";
 	[SerializeField] Rigidbody2D myRigidbody2D;
 	[SerializeField] GameObject trapBullet;
-
+	float cooldown;
 	public Vector2 myDirection;
 	public Vector2 myMoveAxis;
 	[SerializeField] float mySpeed = 1;
@@ -17,7 +17,7 @@ public class PP_Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	}
+ 	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -108,17 +108,16 @@ public class PP_Player : MonoBehaviour {
 		if (inputRightStick.magnitude < deadzone) {
 			myRigidbody2D.MoveRotation (lastRot);
 		}		
-
-
 	}
 
 	private void TrapperAttack ()
 	{
+
 		float inputAttack = Input.GetAxis ("RightTrigger");
 		if (inputAttack == 1) {
 				trapBullet = Instantiate (Resources.Load ("Prefabs/TrapBullet") as GameObject); 
 				trapBullet.transform.position = transform.position;
-				trapBullet.transform.rotation = transform.rotation;		
+				trapBullet.transform.rotation = transform.rotation;	
 		}
 	}
 
