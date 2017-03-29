@@ -17,7 +17,8 @@ public class PP_Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
- 	}
+		Debug.Log("HELLO!"); 	
+}
 	
 	// Update is called once per frame
 	void Update ()
@@ -31,6 +32,9 @@ public class PP_Player : MonoBehaviour {
 	{
 		float t_inputHorizontal = Input.GetAxis ("Horizontal");
 		float t_inputVertical = Input.GetAxis ("Vertical");
+		
+//		float t_inputHorizontal = Input.GetAxis ("Horizontal");
+//		float t_inputVertical = Input.GetAxis ("Vertical");
 //		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal).normalized;
 		myDirection = (Vector3.up * t_inputVertical + Vector3.right * t_inputHorizontal);
 
